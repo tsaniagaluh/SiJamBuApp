@@ -1,30 +1,28 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _USER_H
 #define _USER_H
 
-class User: public User {
+#include <string>
+using namespace std;
+
+class User {
 public: 
     
 /**
  * @param id
  * @param name
  */
-void User(int id, string name);
+User(int id, string name);
     
-int getId();
+int getId() const;
     
-string getNama();
+string getNama() const;
     
 /**
  * @param nama
  */
 void setNama(string nama);
     
-string toString();
+string toString() const;
 private: 
     int id;
     string nama;

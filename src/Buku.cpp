@@ -1,9 +1,5 @@
-/**
- * Project Program Akademik
- */
-
-
 #include "Buku.h"
+#include <string>
 
 /**
  * Buku implementation
@@ -17,43 +13,43 @@
  * @param tahun
  * @param stok
  */
-void Buku::Buku(int id, string judul, string penulis, int tahun, int stok) {
-
+Buku::Buku(int id, string judul, string penulis, int tahun, int stok) 
+    : id(id), judul(judul), penulis(penulis), tahunTerbit(tahun), stok(stok) {
 }
 
 /**
  * @return int
  */
-int Buku::getId() {
-    return 0;
+int Buku::getId() const {
+    return id;
 }
 
 /**
  * @return string
  */
-string Buku::getJudul() {
-    return "";
+string Buku::getJudul() const {
+    return judul;
 }
 
 /**
  * @return string
  */
-string Buku::getPenulis() {
-    return "";
+string Buku::getPenulis() const {
+    return penulis;
 }
 
 /**
  * @return int
  */
-int Buku::getTahun() {
-    return 0;
+int Buku::getTahun() const {
+    return tahunTerbit;
 }
 
 /**
  * @return int
  */
-int Buku::getStok() {
-    return 0;
+int Buku::getStok() const {
+    return stok;
 }
 
 /**
@@ -61,7 +57,7 @@ int Buku::getStok() {
  * @return void
  */
 void Buku::setJudul(string judul) {
-    return;
+    this->judul = judul;
 }
 
 /**
@@ -69,7 +65,7 @@ void Buku::setJudul(string judul) {
  * @return void
  */
 void Buku::setPenulis(string penulis) {
-    return;
+    this->penulis = penulis;
 }
 
 /**
@@ -77,7 +73,7 @@ void Buku::setPenulis(string penulis) {
  * @return void
  */
 void Buku::setTahunTerbit(int tahunTerbit) {
-    return;
+    this->tahunTerbit = tahunTerbit;
 }
 
 /**
@@ -85,14 +81,14 @@ void Buku::setTahunTerbit(int tahunTerbit) {
  * @return void
  */
 void Buku::setStok(int stok) {
-    return;
+    this->stok = stok;
 }
 
 /**
  * @return bool
  */
-bool Buku::tersedia() {
-    return false;
+bool Buku::tersedia() const {
+    return stok > 0;
 }
 
 /**
@@ -100,6 +96,10 @@ bool Buku::tersedia() {
  * @return bool
  */
 bool Buku::kurangiStok(int qty) {
+    if (stok >= qty) {
+        stok -= qty;
+        return true;
+    }
     return false;
 }
 
@@ -108,12 +108,13 @@ bool Buku::kurangiStok(int qty) {
  * @return void
  */
 void Buku::tambahStok(int qty) {
-    return;
+    stok += qty;
 }
 
 /**
  * @return string
  */
-string Buku::toString() {
-    return "";
+string Buku::toString() const {
+    return "ID: " + to_string(id) + " | Judul: " + judul + " | Penulis: " + penulis + 
+           " | Tahun: " + to_string(tahunTerbit) + " | Stok: " + to_string(stok);
 }

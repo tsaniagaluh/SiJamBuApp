@@ -1,22 +1,19 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _ADMIN_H
 #define _ADMIN_H
 
 #include "User.h"
+#include <string>
+using namespace std;
 
 
-class Admin: public Admin, public Admin, public User {
+class Admin: public User {
 public: 
     
 /**
  * @param id
  * @param nama
  */
-void Admin(int id, string nama);
+Admin(int id, string nama);
 };
 
 #endif //_ADMIN_H

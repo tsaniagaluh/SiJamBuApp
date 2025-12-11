@@ -1,10 +1,8 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _BUKU_H
 #define _BUKU_H
+
+#include <string>
+using namespace std;
 
 class Buku {
 public: 
@@ -16,17 +14,17 @@ public:
  * @param tahun
  * @param stok
  */
-void Buku(int id, string judul, string penulis, int tahun, int stok);
+Buku(int id, string judul, string penulis, int tahun, int stok);
     
-int getId();
+int getId() const;
     
-string getJudul();
+string getJudul() const;
     
-string getPenulis();
+string getPenulis() const;
     
-int getTahun();
+int getTahun() const;
     
-int getStok();
+int getStok() const;
     
 /**
  * @param judul
@@ -48,7 +46,7 @@ void setTahunTerbit(int tahunTerbit);
  */
 void setStok(int stok);
     
-bool tersedia();
+bool tersedia() const;
     
 /**
  * @param qty
@@ -60,7 +58,7 @@ bool kurangiStok(int qty);
  */
 void tambahStok(int qty);
     
-string toString();
+string toString() const;
 private: 
     int id;
     string judul;

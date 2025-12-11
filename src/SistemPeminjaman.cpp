@@ -4,6 +4,9 @@
 
 
 #include "SistemPeminjaman.h"
+#include <iostream>
+#include <algorithm>
+using namespace std;
 
 /**
  * SistemPeminjaman implementation
@@ -14,22 +17,24 @@
  * @param pathInput
  * @param pathOutput
  */
-void SistemPeminjaman::SistemPeminjaman(string pathInput, string pathOutput) {
-
+SistemPeminjaman::SistemPeminjaman(string pathInput, string pathOutput)
+    : storage(pathInput, pathOutput), nextIdBuku(1), nextIdUser(1), nextIdTransaksi(1) {
 }
 
 /**
  * @return bool
  */
 bool SistemPeminjaman::muatData() {
-    return false;
+    return storage.muatBuku(daftarBuku) && storage.muatUser(daftarUser) && 
+           storage.muatTransaksi(daftarTransaksi);
 }
 
 /**
  * @return bool
  */
 bool SistemPeminjaman::simpanData() {
-    return false;
+    return storage.simpanBuku(daftarBuku) && storage.simpanUser(daftarUser) && 
+           storage.simpanTransaksi(daftarTransaksi);
 }
 
 /**
@@ -40,7 +45,9 @@ bool SistemPeminjaman::simpanData() {
  * @return int
  */
 int SistemPeminjaman::tambahBuku(string judul, string penulis, int tahunTerbit, int stok) {
-    return 0;
+    Buku bukuBaru(nextIdBuku, judul, penulis, tahunTerbit, stok);
+    daftarBuku.push_back(bukuBaru);
+    return nextIdBuku++;
 }
 
 /**
@@ -52,6 +59,15 @@ int SistemPeminjaman::tambahBuku(string judul, string penulis, int tahunTerbit, 
  * @return bool
  */
 bool SistemPeminjaman::editBuku(int idBuku, string judul, string penulis, int tahunTerbit, int stok) {
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            buku.setJudul(judul);
+            buku.setPenulis(penulis);
+            buku.setTahunTerbit(tahunTerbit);
+            buku.setStok(stok);
+            return true;
+        }
+    }
     return false;
 }
 
@@ -60,6 +76,12 @@ bool SistemPeminjaman::editBuku(int idBuku, string judul, string penulis, int ta
  * @return bool
  */
 bool SistemPeminjaman::hapusBuku(int idBuku) {
+    auto it = find_if(daftarBuku.begin(), daftarBuku.end(),
+                     [idBuku](const Buku& b) { return b.getId() == idBuku; });
+    if (it != daftarBuku.end()) {
+        daftarBuku.erase(it);
+        return true;
+    }
     return false;
 }
 
@@ -68,14 +90,27 @@ bool SistemPeminjaman::hapusBuku(int idBuku) {
  * @return Buku
  */
 Buku SistemPeminjaman::cariBukuById(int idBuku) {
-    return null;
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            return buku;
+        }
+    }
+    // Return a dummy book if not found (ID -1 indicates not found)
+    return Buku(-1, "", "", 0, 0);
 }
 
 /**
  * @return void
  */
 void SistemPeminjaman::tampilkanDaftarBuku() {
-    return;
+    if (daftarBuku.empty()) {
+        cout << "Belum ada data buku." << endl;
+        return;
+    }
+    cout << "\n=== DAFTAR BUKU ===" << endl;
+    for (const auto& buku : daftarBuku) {
+        cout << buku.toString() << endl;
+    }
 }
 
 /**
@@ -83,7 +118,17 @@ void SistemPeminjaman::tampilkanDaftarBuku() {
  * @return void
  */
 void SistemPeminjaman::cariBukuByJudul(string keyword) {
-    return;
+    cout << "\n=== HASIL PENCARIAN ===" << endl;
+    bool found = false;
+    for (const auto& buku : daftarBuku) {
+        if (buku.getJudul().find(keyword) != string::npos) {
+            cout << buku.toString() << endl;
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "Tidak ada buku dengan judul mengandung '" << keyword << "'." << endl;
+    }
 }
 
 /**
@@ -91,7 +136,9 @@ void SistemPeminjaman::cariBukuByJudul(string keyword) {
  * @return int
  */
 int SistemPeminjaman::tambahUser(string nama) {
-    return 0;
+    User userBaru(nextIdUser, nama);
+    daftarUser.push_back(userBaru);
+    return nextIdUser++;
 }
 
 /**
@@ -99,14 +146,27 @@ int SistemPeminjaman::tambahUser(string nama) {
  * @return User
  */
 User SistemPeminjaman::cariUserById(int idUser) {
-    return null;
+    for (auto& user : daftarUser) {
+        if (user.getId() == idUser) {
+            return user;
+        }
+    }
+    // Return a dummy user if not found (ID -1 indicates not found)
+    return User(-1, "");
 }
 
 /**
  * @return void
  */
 void SistemPeminjaman::tampilkanDaftarUser() {
-    return;
+    if (daftarUser.empty()) {
+        cout << "Belum ada data user." << endl;
+        return;
+    }
+    cout << "\n=== DAFTAR USER ===" << endl;
+    for (const auto& user : daftarUser) {
+        cout << user.toString() << endl;
+    }
 }
 
 /**
@@ -116,6 +176,31 @@ void SistemPeminjaman::tampilkanDaftarUser() {
  * @return bool
  */
 bool SistemPeminjaman::pinjamBuku(int idUser, int idBuku, string tanggalPinjam) {
+    // Cek user ada
+    if (cariUserById(idUser).getId() == -1) {
+        cout << "User dengan ID " << idUser << " tidak ditemukan." << endl;
+        return false;
+    }
+    
+    // Cari buku
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            if (!buku.tersedia()) {
+                cout << "Buku tidak tersedia (stok habis)." << endl;
+                return false;
+            }
+            // Kurangi stok
+            if (buku.kurangiStok(1)) {
+                // Buat transaksi
+                TransaksiPeminjaman transaksi(nextIdTransaksi, idUser, idBuku, tanggalPinjam);
+                daftarTransaksi.push_back(transaksi);
+                nextIdTransaksi++;
+                cout << "Peminjaman berhasil. Transaksi ID: " << (nextIdTransaksi - 1) << endl;
+                return true;
+            }
+        }
+    }
+    cout << "Buku dengan ID " << idBuku << " tidak ditemukan." << endl;
     return false;
 }
 
@@ -126,6 +211,24 @@ bool SistemPeminjaman::pinjamBuku(int idUser, int idBuku, string tanggalPinjam) 
  * @return bool
  */
 bool SistemPeminjaman::kembalikanBuku(int idUser, int idBuku, string tanggalKembali) {
+    // Cari transaksi yang belum dikembalikan
+    for (auto& transaksi : daftarTransaksi) {
+        if (transaksi.getIdUser() == idUser && transaksi.getIdBuku() == idBuku && 
+            !transaksi.getSudahDikembalikan()) {
+            // Tandai dikembalikan
+            transaksi.tandaiDikembalikan(tanggalKembali);
+            
+            // Tambah stok buku
+            for (auto& buku : daftarBuku) {
+                if (buku.getId() == idBuku) {
+                    buku.tambahStok(1);
+                    cout << "Pengembalian berhasil." << endl;
+                    return true;
+                }
+            }
+        }
+    }
+    cout << "Transaksi peminjaman tidak ditemukan." << endl;
     return false;
 }
 
@@ -134,5 +237,15 @@ bool SistemPeminjaman::kembalikanBuku(int idUser, int idBuku, string tanggalKemb
  * @return void
  */
 void SistemPeminjaman::tampilkanPinjamanUser(int idUser) {
-    return;
+    cout << "\n=== DAFTAR PEMINJAMAN USER ID " << idUser << " ===" << endl;
+    bool found = false;
+    for (const auto& transaksi : daftarTransaksi) {
+        if (transaksi.getIdUser() == idUser) {
+            cout << transaksi.toString() << endl;
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "Tidak ada riwayat peminjaman untuk user ini." << endl;
+    }
 }

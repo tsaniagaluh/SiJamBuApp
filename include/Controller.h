@@ -1,10 +1,9 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _CONTROLLER_H
 #define _CONTROLLER_H
+
+#include "SistemPeminjaman.h"
+#include <string>
+using namespace std;
 
 class Controller {
 public: 
@@ -13,7 +12,7 @@ public:
  * @param pathInput
  * @param pathOutput
  */
-void Controller(string pathInput, string pathOutput);
+Controller(string pathInput, string pathOutput);
     
 void loopPerintah();
     

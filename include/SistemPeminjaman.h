@@ -1,10 +1,13 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _SISTEMPEMINJAMAN_H
 #define _SISTEMPEMINJAMAN_H
+
+#include "Buku.h"
+#include "User.h"
+#include "TransaksiPeminjaman.h"
+#include "PenyimpananFile.h"
+#include <vector>
+#include <string>
+using namespace std;
 
 class SistemPeminjaman {
 public: 
@@ -13,7 +16,7 @@ public:
  * @param pathInput
  * @param pathOutput
  */
-void SistemPeminjaman(string pathInput, string pathOutput);
+SistemPeminjaman(string pathInput, string pathOutput);
     
 bool muatData();
     
@@ -84,9 +87,9 @@ bool kembalikanBuku(int idUser, int idBuku, string tanggalKembali);
  */
 void tampilkanPinjamanUser(int idUser);
 private: 
-    List<Buku> daftarBuku;
-    List<User> daftarUser;
-    List<TransaksiPeminjaman> daftarTransaksi;
+    vector<Buku> daftarBuku;
+    vector<User> daftarUser;
+    vector<TransaksiPeminjaman> daftarTransaksi;
     PenyimpananFile storage;
     int nextIdBuku;
     int nextIdUser;

@@ -1,0 +1,12 @@
+# Build outputs
+build/
+*.exe
+*.o
+*.obj
+
+# VS Code settings (optional: keep or ignore)
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db

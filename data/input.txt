@@ -1,0 +1,6 @@
+# DAFTAR BUKU - Format: ID Judul Penulis Tahun Stok
+1 ProgrammingC++ Bjarne 2023 5
+2 Algoritma ThomasCormen 2009 3
+3 DatabaseSQL AbrahamSilberschatz 2010 4
+4 WebDevelopment JonDuck 2022 2
+5 MobileApp RobertMartin 2020 6

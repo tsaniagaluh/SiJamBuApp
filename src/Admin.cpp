@@ -1,8 +1,3 @@
-/**
- * Project Program Akademik
- */
-
-
 #include "Admin.h"
 
 /**
@@ -14,6 +9,5 @@
  * @param id
  * @param nama
  */
-void Admin::Admin(int id, string nama) {
-
+Admin::Admin(int id, string nama) : User(id, nama) {
 }

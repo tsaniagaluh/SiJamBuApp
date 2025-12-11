@@ -14,22 +14,22 @@
  * @param id
  * @param name
  */
-void User::User(int id, string name) {
-
+User::User(int id, string name) 
+    : id(id), nama(name) {
 }
 
 /**
  * @return int
  */
-int User::getId() {
-    return 0;
+int User::getId() const {
+    return id;
 }
 
 /**
  * @return string
  */
-string User::getNama() {
-    return "";
+string User::getNama() const {
+    return nama;
 }
 
 /**
@@ -37,12 +37,12 @@ string User::getNama() {
  * @return void
  */
 void User::setNama(string nama) {
-    return;
+    this->nama = nama;
 }
 
 /**
  * @return string
  */
-string User::toString() {
-    return "";
+string User::toString() const {
+    return "ID: " + to_string(id) + " | Nama: " + nama;
 }

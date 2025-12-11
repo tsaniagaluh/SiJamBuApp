@@ -1,10 +1,12 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _PENYIMPANANFILE_H
 #define _PENYIMPANANFILE_H
+
+#include "Buku.h"
+#include "User.h"
+#include "TransaksiPeminjaman.h"
+#include <vector>
+#include <string>
+using namespace std;
 
 class PenyimpananFile {
 public: 
@@ -13,37 +15,37 @@ public:
  * @param pathInput
  * @param pathOutput
  */
-void PenyimpananFile(string pathInput, string pathOutput);
+PenyimpananFile(string pathInput, string pathOutput);
     
 /**
  * @param buku
  */
-bool muatBuku(List<Buku> buku);
+bool muatBuku(vector<Buku>& buku);
     
 /**
  * @param buku
  */
-bool simpanBuku(List<Buku> buku);
+bool simpanBuku(vector<Buku>& buku);
     
 /**
  * @param user
  */
-bool muatUser(List<User> user);
+bool muatUser(vector<User>& user);
     
 /**
  * @param user
  */
-bool simpanUser(List<User> user);
+bool simpanUser(vector<User>& user);
     
 /**
  * @param transaksi
  */
-bool muatTransaksi(List<TransaksiPeminjaman> transaksi);
+bool muatTransaksi(vector<TransaksiPeminjaman>& transaksi);
     
 /**
  * @param transaksi
  */
-bool simpanTransaksi(List<TransaksiPeminjaman> transaksi);
+bool simpanTransaksi(vector<TransaksiPeminjaman>& transaksi);
 private: 
     string pathInput;
     string pathOutput;

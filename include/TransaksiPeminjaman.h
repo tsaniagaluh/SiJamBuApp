@@ -1,10 +1,8 @@
-/**
- * Project Program Akademik
- */
-
-
 #ifndef _TRANSAKSIPEMINJAMAN_H
 #define _TRANSAKSIPEMINJAMAN_H
+
+#include <string>
+using namespace std;
 
 class TransaksiPeminjaman {
 public: 
@@ -15,26 +13,26 @@ public:
  * @param idBuku
  * @param tanggalPinjam
  */
-void TransaksiPeminjaman(int id, int idUser, int idBuku, string tanggalPinjam);
+TransaksiPeminjaman(int id, int idUser, int idBuku, string tanggalPinjam);
     
-int getId();
+int getId() const;
     
-int getIdUser();
+int getIdUser() const;
     
-int getIdBuku();
+int getIdBuku() const;
     
-string getTanggalPinjam();
+string getTanggalPinjam() const;
     
-string getTanggalKembali();
+string getTanggalKembali() const;
     
-bool getSudahDikembalikan();
+bool getSudahDikembalikan() const;
     
 /**
  * @param tanggalKembali
  */
 void tandaiDikembalikan(string tanggalKembali);
     
-string toString();
+string toString() const;
 private: 
     int id;
     int idUser;
