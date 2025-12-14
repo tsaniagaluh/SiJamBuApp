@@ -17,6 +17,39 @@ SistemPeminjaman::SistemPeminjaman(string pathInput, string pathOutput)
 }
 
 /**
+ * Helper function: case and space insensitive 
+ */
+static string toLowercase(string str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    return str;
+}
+
+static string trim(string str) {
+    size_t start = str.find_first_not_of(" \t\n\r\f\v");
+    if (start == string::npos) return "";
+
+    size_t end = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(start, (end - start + 1));
+}
+
+static string normalizeSpaces(string str) {
+    string result;
+    bool prevSpace = false;
+    for (char c : str) {
+        if (c == ' ') {
+            if (!prevSpace) {
+                result += ' ';
+                prevSpace = true;
+            }
+        } else {
+            result += c;
+            prevSpace = false;
+        }
+    }
+    return result;
+}
+
+/**
  * @return bool
  */
 bool SistemPeminjaman::muatData() {
@@ -210,10 +243,19 @@ void SistemPeminjaman::tampilkanDaftarBuku() {
  * @return void
  */
 void SistemPeminjaman::cariBukuByJudul(string keyword) {
+    string normalizedKeyword = toLowercase(normalizeSpaces(trim(keyword)));
+    
+    if (normalizedKeyword.empty()) {
+        cout << "Kata kunci pencarian tidak boleh kosong." << endl;
+        return;
+    }
+    
     cout << "\n=== HASIL PENCARIAN ===" << endl;
     bool found = false;
     for (const auto& buku : daftarBuku) {
-        if (buku.getJudul().find(keyword) != string::npos) {
+        string normalizedJudul = toLowercase(normalizeSpaces(trim(buku.getJudul())));
+
+        if (normalizedJudul.find(normalizedKeyword) != string::npos) {
             cout << buku.toString() << endl;
             found = true;
         }
