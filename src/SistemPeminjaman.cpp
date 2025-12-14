@@ -1,8 +1,3 @@
-/**
- * Project Program Akademik
- */
-
-
 #include "SistemPeminjaman.h"
 #include <iostream>
 #include <algorithm>
@@ -25,8 +20,45 @@ SistemPeminjaman::SistemPeminjaman(string pathInput, string pathOutput)
  * @return bool
  */
 bool SistemPeminjaman::muatData() {
-    return storage.muatBuku(daftarBuku) && storage.muatUser(daftarUser) && 
-           storage.muatTransaksi(daftarTransaksi);
+    bool success = storage.muatBuku(daftarBuku) && storage.muatUser(daftarUser) && 
+                   storage.muatTransaksi(daftarTransaksi);
+    
+    if (success) {
+        // Update nextIdBuku menjadi max ID + 1
+        if (!daftarBuku.empty()) {
+            int maxBukuId = 0;
+            for (const auto& buku : daftarBuku) {
+                if (buku.getId() > maxBukuId) {
+                    maxBukuId = buku.getId();
+                }
+            }
+            nextIdBuku = maxBukuId + 1;
+        }
+        
+        // Update nextIdUser menjadi max ID + 1
+        if (!daftarUser.empty()) {
+            int maxUserId = 0;
+            for (const auto& user : daftarUser) {
+                if (user.getId() > maxUserId) {
+                    maxUserId = user.getId();
+                }
+            }
+            nextIdUser = maxUserId + 1;
+        }
+        
+        // Update nextIdTransaksi menjadi max ID + 1
+        if (!daftarTransaksi.empty()) {
+            int maxTransaksiId = 0;
+            for (const auto& transaksi : daftarTransaksi) {
+                if (transaksi.getId() > maxTransaksiId) {
+                    maxTransaksiId = transaksi.getId();
+                }
+            }
+            nextIdTransaksi = maxTransaksiId + 1;
+        }
+    }
+    
+    return success;
 }
 
 /**
@@ -73,6 +105,66 @@ bool SistemPeminjaman::editBuku(int idBuku, string judul, string penulis, int ta
 
 /**
  * @param idBuku
+ * @param judul
+ * @return bool
+ */
+bool SistemPeminjaman::editBukuJudul(int idBuku, string judul) {
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            buku.setJudul(judul);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * @param idBuku
+ * @param penulis
+ * @return bool
+ */
+bool SistemPeminjaman::editBukuPenulis(int idBuku, string penulis) {
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            buku.setPenulis(penulis);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * @param idBuku
+ * @param tahunTerbit
+ * @return bool
+ */
+bool SistemPeminjaman::editBukuTahun(int idBuku, int tahunTerbit) {
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            buku.setTahunTerbit(tahunTerbit);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * @param idBuku
+ * @param stok
+ * @return bool
+ */
+bool SistemPeminjaman::editBukuStok(int idBuku, int stok) {
+    for (auto& buku : daftarBuku) {
+        if (buku.getId() == idBuku) {
+            buku.setStok(stok);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * @param idBuku
  * @return bool
  */
 bool SistemPeminjaman::hapusBuku(int idBuku) {
@@ -95,7 +187,7 @@ Buku SistemPeminjaman::cariBukuById(int idBuku) {
             return buku;
         }
     }
-    // Return a dummy book if not found (ID -1 indicates not found)
+    // Return dummy book jika tidak ditemukan (ID -1 menunjukkan tidak ditemukan)
     return Buku(-1, "", "", 0, 0);
 }
 
@@ -151,7 +243,7 @@ User SistemPeminjaman::cariUserById(int idUser) {
             return user;
         }
     }
-    // Return a dummy user if not found (ID -1 indicates not found)
+    // Return dummy user jika tidak ditemukan (ID -1 menunjukkan tidak ditemukan)
     return User(-1, "");
 }
 
@@ -247,5 +339,19 @@ void SistemPeminjaman::tampilkanPinjamanUser(int idUser) {
     }
     if (!found) {
         cout << "Tidak ada riwayat peminjaman untuk user ini." << endl;
+    }
+}
+
+/**
+ * Display seluruh transaksi
+ */
+void SistemPeminjaman::tampilkanDaftarTransaksi() {
+    if (daftarTransaksi.empty()) {
+        cout << "Belum ada data transaksi peminjaman." << endl;
+        return;
+    }
+    cout << "\n=== DAFTAR TRANSAKSI PEMINJAMAN ===" << endl;
+    for (const auto& transaksi : daftarTransaksi) {
+        cout << transaksi.toString() << endl;
     }
 }

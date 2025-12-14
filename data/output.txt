@@ -1,9 +1,9 @@
 # DAFTAR BUKU
-1 ProgrammingC++ Bjarne 2023 5
-2 Algoritma ThomasCormen 2009 3
+1 ProgrammingC++ Bjarne 2023 4
+2 Algoritma ThomasCormen 2009 4
 3 DatabaseSQL AbrahamSilberschatz 2010 4
-4 WebDevelopment JonDuck 2022 2
-5 MobileApp RobertMartin 2020 6
+5 MobileApp RobertMartin 2020 8
+6 ArtificialIntelligence StuartRussell 2016 4
 
 # DAFTAR USER
 1 Diah
@@ -13,6 +13,7 @@
 # DAFTAR TRANSAKSI PEMINJAMAN
 # Format: ID IDUser IDBuku TanggalPinjam TanggalKembali
 1 1 1 05/12/2024 06/12/2024
-2 2 2 04/12/2024 -
+2 2 2 04/12/2024 12/12/2025
 3 3 3 03/12/2024 -
+4 2 1 12/12/2025 -
 

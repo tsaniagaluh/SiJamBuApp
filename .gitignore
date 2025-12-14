@@ -1,12 +1,20 @@
 # Build outputs
-build/
-*.exe
 *.o
 *.obj
+*.out
 
-# VS Code settings (optional: keep or ignore)
+# Temporary build artifacts
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+*.cmake
+
+# VS Code settings 
 .vscode/
 
 # OS junk
 .DS_Store
 Thumbs.db
+*~
+*.swp
+*.swo

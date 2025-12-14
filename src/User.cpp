@@ -1,8 +1,3 @@
-/**
- * Project Program Akademik
- */
-
-
 #include "User.h"
 
 /**

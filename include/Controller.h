@@ -28,6 +28,10 @@ void uiHapusBuku();
     
 void uiTampilkanDaftarBuku();
     
+void uiTampilkanDaftarUser();
+    
+void uiTampilkanDaftarTransaksi();
+    
 void uiPinjamBuku();
     
 void uiKembalikanBuku();
@@ -39,6 +43,7 @@ void uiMuatData();
 void uiSimpanData();
 private: 
     SistemPeminjaman sistem;
+    int currentUserId;  // Menyimpan current user ID untuk Menu User
 };
 
 #endif //_CONTROLLER_H

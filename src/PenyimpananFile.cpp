@@ -1,8 +1,3 @@
-/**
- * Project Program Akademik
- */
-
-
 #include "PenyimpananFile.h"
 #include <fstream>
 #include <sstream>
@@ -77,8 +72,53 @@ bool PenyimpananFile::simpanBuku(vector<Buku>& buku) {
  * @param user
  * @return bool
  */
-bool PenyimpananFile::muatUser(vector<User>& /* user */) {
-    // For now, return true (dummy implementation)
+bool PenyimpananFile::muatUser(vector<User>& user) {
+    ifstream file(pathInput);
+    if (!file.is_open()) {
+        cout << "File input tidak ditemukan: " << pathInput << endl;
+        return false;
+    }
+    
+    string line;
+    bool inUserSection = false;
+    int lineNum = 0;
+    
+    while (getline(file, line)) {
+        // Cek jika ini adalah section header user
+        if (line.find("DAFTAR BUKU") != string::npos) {
+            inUserSection = false;
+            continue;
+        }
+        if (line.find("DAFTAR USER") != string::npos) {
+            inUserSection = true;
+            continue;
+        }
+        if (line.find("DAFTAR TRANSAKSI") != string::npos) {
+            inUserSection = false;
+            continue;
+        }
+        
+        // Skip baris kosong dan komentar
+        if (line.empty() || line[0] == '#') {
+            continue;
+        }
+        
+        if (!inUserSection) continue;
+        
+        istringstream iss(line);
+        int id;
+        string nama;
+        
+        if (iss >> id && getline(iss, nama)) {
+            if (!nama.empty() && nama[0] == ' ') {
+                nama = nama.substr(1);
+            }
+            user.push_back(User(id, nama));
+        }
+        lineNum++;
+    }
+    
+    file.close();
     return true;
 }
 
@@ -86,8 +126,19 @@ bool PenyimpananFile::muatUser(vector<User>& /* user */) {
  * @param user
  * @return bool
  */
-bool PenyimpananFile::simpanUser(vector<User>& /* user */) {
-    // For now, return true (dummy implementation)
+bool PenyimpananFile::simpanUser(vector<User>& user) {
+    ofstream file(pathOutput, ios::app);  // Append ke file yang sudah ada
+    if (!file.is_open()) {
+        cout << "Gagal membuka file output: " << pathOutput << endl;
+        return false;
+    }
+    
+    file << "\n# DAFTAR USER" << endl;
+    for (const auto& u : user) {
+        file << u.getId() << " " << u.getNama() << endl;
+    }
+    
+    file.close();
     return true;
 }
 
@@ -95,8 +146,44 @@ bool PenyimpananFile::simpanUser(vector<User>& /* user */) {
  * @param transaksi
  * @return bool
  */
-bool PenyimpananFile::muatTransaksi(vector<TransaksiPeminjaman>& /* transaksi */) {
-    // For now, return true (dummy implementation)
+bool PenyimpananFile::muatTransaksi(vector<TransaksiPeminjaman>& transaksi) {
+    ifstream file(pathInput);
+    if (!file.is_open()) {
+        cout << "File input tidak ditemukan: " << pathInput << endl;
+        return false;
+    }
+    
+    string line;
+    bool inTransaksiSection = false;
+    int lineNum = 0;
+    
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#') {
+            // Cek jika ini adalah section header transaksi
+            if (line.find("TRANSAKSI") != string::npos || line.find("PEMINJAMAN") != string::npos) {
+                inTransaksiSection = true;
+            }
+            continue;
+        }
+        
+        if (!inTransaksiSection) continue;
+        
+        istringstream iss(line);
+        int id, idUser, idBuku;
+        string tanggalPinjam, tanggalKembali;
+        
+        if (iss >> id >> idUser >> idBuku >> tanggalPinjam >> tanggalKembali) {
+            TransaksiPeminjaman t(id, idUser, idBuku, tanggalPinjam);
+            // Parse tanggalKembali dan status jika ada
+            if (tanggalKembali != "-") {
+                t.tandaiDikembalikan(tanggalKembali);
+            }
+            transaksi.push_back(t);
+        }
+        lineNum++;
+    }
+    
+    file.close();
     return true;
 }
 
@@ -104,7 +191,21 @@ bool PenyimpananFile::muatTransaksi(vector<TransaksiPeminjaman>& /* transaksi */
  * @param transaksi
  * @return bool
  */
-bool PenyimpananFile::simpanTransaksi(vector<TransaksiPeminjaman>& /* transaksi */) {
-    // For now, return true (dummy implementation)
+bool PenyimpananFile::simpanTransaksi(vector<TransaksiPeminjaman>& transaksi) {
+    ofstream file(pathOutput, ios::app);  // Append ke file yang sudah ada
+    if (!file.is_open()) {
+        cout << "Gagal membuka file output: " << pathOutput << endl;
+        return false;
+    }
+    
+    file << "\n# DAFTAR TRANSAKSI PEMINJAMAN" << endl;
+    file << "# Format: ID IDUser IDBuku TanggalPinjam TanggalKembali" << endl;
+    for (const auto& t : transaksi) {
+        file << t.getId() << " " << t.getIdUser() << " " << t.getIdBuku() << " "
+             << t.getTanggalPinjam() << " " 
+             << (t.getTanggalKembali().empty() ? "-" : t.getTanggalKembali()) << endl;
+    }
+    
+    file.close();
     return true;
 }

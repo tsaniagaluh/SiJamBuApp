@@ -41,6 +41,30 @@ bool editBuku(int idBuku, string judul, string penulis, int tahunTerbit, int sto
     
 /**
  * @param idBuku
+ * @param judul
+ */
+bool editBukuJudul(int idBuku, string judul);
+    
+/**
+ * @param idBuku
+ * @param penulis
+ */
+bool editBukuPenulis(int idBuku, string penulis);
+    
+/**
+ * @param idBuku
+ * @param tahunTerbit
+ */
+bool editBukuTahun(int idBuku, int tahunTerbit);
+    
+/**
+ * @param idBuku
+ * @param stok
+ */
+bool editBukuStok(int idBuku, int stok);
+    
+/**
+ * @param idBuku
  */
 bool hapusBuku(int idBuku);
     
@@ -86,6 +110,11 @@ bool kembalikanBuku(int idUser, int idBuku, string tanggalKembali);
  * @param idUser
  */
 void tampilkanPinjamanUser(int idUser);
+    
+/**
+ * Display seluruh transaksi peminjaman
+ */
+void tampilkanDaftarTransaksi();
 private: 
     vector<Buku> daftarBuku;
     vector<User> daftarUser;
